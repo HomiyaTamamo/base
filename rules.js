@@ -152,7 +152,7 @@ function updateBG() {
         editor.style.backgroundImage = `url('assets/HD/bg_zone_${highestCheckedLevel}.png')`;
     }
 }
-function addHole() {
+/*function addHole() {
     const limitedCheck = $.q('.limited-check');
     if (limitedCheck) {
         $.c('div', `
@@ -172,6 +172,52 @@ function rmvHole() {
         if (counterBox) {
             limitedCheck.removeChild(counterBox);
         }
+    }
+}*/
+let holeCount = 0; 
+
+function addHole() {
+    const limitedCheck = $.q('.limited-check');
+    const addButton = document.querySelector('button[onclick="addHole()"]'); 
+
+    if (limitedCheck && holeCount < 5) {
+        $.c('div', `
+            <span class="counter-label">0</span>
+            <span class="depth-label">0</span>
+        `, limitedCheck, null, {
+            class: 'counter-box beyond',
+            onclick: 'increment(this, event)',
+            oncontextmenu: 'decrement(this, event); return false;'
+        });
+
+        holeCount++; 
+
+        if (holeCount === 5) {
+            addButton.disabled = true;
+        } else {
+            addButton.disabled = false;
+        }
+    }
+}
+
+function rmvHole() {
+    const limitedCheck = $.q('.limited-check');
+    const addButton = document.querySelector('button[onclick="addHole()"]');
+    
+    if (limitedCheck) {
+        const counterBox = limitedCheck.querySelector('.counter-box.beyond');
+        if (counterBox) {
+            limitedCheck.removeChild(counterBox);
+            holeCount--; 
+        }
+    }
+
+    if (holeCount < 5) {
+        addButton.disabled = false;
+    }
+
+    if (holeCount <= 0) {
+        holeCount = 0; 
     }
 }
 function getCheck() {
